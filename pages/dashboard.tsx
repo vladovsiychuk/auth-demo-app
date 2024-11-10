@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Dashboard: React.FC = () => {
     const [postData, setPostData] = useState(null);
@@ -9,7 +9,6 @@ const Dashboard: React.FC = () => {
     };
 
     const fetchProtectedData = async () => {
-
         // Get the auth_token from the cookie
         const token = document.cookie
             .split('; ')
@@ -35,6 +34,28 @@ const Dashboard: React.FC = () => {
         const data = await response.json();
         setPostData(data);
     };
+
+    // Function to refresh the session token every 5 seconds
+    const refreshSession = async () => {
+        try {
+            const response = await fetch("http://localhost:8080/auth/refresh", {
+                method: "GET",
+                credentials: "include", // Include cookies (important for the session cookie)
+            });
+
+            if (!response.ok) {
+                console.error("Failed to refresh session");
+            }
+        } catch (error) {
+            console.error("Error refreshing session:", error);
+        }
+    };
+
+    useEffect(() => {
+        const intervalId = setInterval(refreshSession, 5000);
+
+        return () => clearInterval(intervalId);
+    }, []);
 
     return (
         <div className="flex flex-col justify-center items-center h-screen">
