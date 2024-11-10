@@ -9,33 +9,31 @@ const Dashboard: React.FC = () => {
     };
 
     const fetchProtectedData = async () => {
-        try {
-            // Get the auth_token from the cookie
-            const token = document.cookie
-                .split('; ')
-                .find(row => row.startsWith('auth_token='))
-                ?.split('=')[1];
 
-            if (!token) {
-                throw new Error("Authentication token not found.");
-            }
+        // Get the auth_token from the cookie
+        const token = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('auth_token='))
+            ?.split('=')[1];
 
-            // Make the request to the protected endpoint
-            const response = await fetch("http://localhost:8080/v1/posts/37f19ff4-9b85-4d43-af80-4d864aae9ab5", {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error(`Request failed: ${response.statusText}`);
-            }
-
-            const data = await response.json();
-            setPostData(data);
-        } catch {
+        if (!token) {
+            throw new Error("Authentication token not found.");
         }
+
+        // Make the request to the protected endpoint
+        const response = await fetch("http://localhost:8080/v1/posts/37f19ff4-9b85-4d43-af80-4d864aae9ab5", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Request failed: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setPostData(data);
     };
 
     return (
