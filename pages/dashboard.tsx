@@ -20,7 +20,7 @@ const Dashboard: React.FC = () => {
         }
 
         // Make the request to the protected endpoint
-        const response = await fetch("http://localhost:8080/v1/posts/37f19ff4-9b85-4d43-af80-4d864aae9ab5", {
+        const response = await fetch("http://localhost:8080/v1/posts/9e5da626-8e14-4886-873a-90d1289cbee3", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`
